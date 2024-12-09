@@ -41,10 +41,17 @@ fn main() {
     }
 
     let mut dist = 0;
+    let mut similarity = 0;
+
+    for (key, _) in map_one.into_iter() {
+        let val = map_two.get(&key).cloned().unwrap_or(0);
+
+        similarity += key * val;
+    }
 
     while !heap_one.is_empty() && !heap_two.is_empty() {
         dist += (heap_one.pop().unwrap().0 - heap_two.pop().unwrap().0).abs();
     }
 
-    println!("The distance is {dist}");
+    println!("The distance is {dist} and the similarity is {similarity}");
 }
