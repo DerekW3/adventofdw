@@ -1,5 +1,5 @@
 use std::cmp::Reverse;
-use std::collections::BinaryHeap;
+use std::collections::{BinaryHeap, HashMap};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -26,15 +26,24 @@ fn main() {
     let mut heap_one = BinaryHeap::new();
     let mut heap_two = BinaryHeap::new();
 
+    let mut map_one = HashMap::new();
+    let mut map_two = HashMap::new();
+
     for i in 0..numbers_one.len() {
         heap_one.push(Reverse(numbers_one[i]));
         heap_two.push(Reverse(numbers_two[i]));
+
+        let count_one = map_one.entry(numbers_one[i]).or_insert(0);
+        let count_two = map_two.entry(numbers_two[i]).or_insert(0);
+
+        *count_one += 1;
+        *count_two += 1;
     }
 
     let mut dist = 0;
 
     while !heap_one.is_empty() && !heap_two.is_empty() {
-        dist = dist + heap_one.pop().unwrap().0 + heap_two.pop().unwrap().0;
+        dist += (heap_one.pop().unwrap().0 - heap_two.pop().unwrap().0).abs();
     }
 
     println!("The distance is {dist}");
