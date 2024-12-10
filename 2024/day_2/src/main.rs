@@ -15,9 +15,6 @@ fn main() {
             .map(|s| s.parse::<i16>().unwrap())
             .collect();
 
-        println!("{:?}", num_vec);
-        println!("-------------");
-
         let mut dp: i16 = 0;
         for i in 1..num_vec.len() {
             let diff = num_vec[i] - num_vec[i - 1];
