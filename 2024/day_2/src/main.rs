@@ -47,7 +47,7 @@ fn main() {
             if fail_idx < num_vec.len() - 1 {
                 let mut copy_vec = num_vec.clone();
 
-                copy_vec.remove(fail_idx - 1);
+                copy_vec.remove(fail_idx + 1);
 
                 let (r_success, _) = validate_test(&copy_vec);
 
@@ -63,11 +63,11 @@ fn main() {
 }
 
 fn validate_test(nums: &[i16]) -> (bool, usize) {
-    let mut dp: i16 = 0;
-    for i in 1..nums.len() {
-        let diff = nums[i] - nums[i - 1];
+    let mut dp: i16 = if nums.len() > 1 { nums[1] - nums[0] } else { 0 };
+    for i in 0..nums.len() - 1 {
+        let diff = nums[i + 1] - nums[i];
 
-        if (diff.abs() < 1 || diff.abs() > 3) || (i > 1 && (diff.signum() != dp.signum())) {
+        if (diff.abs() < 1 || diff.abs() > 3) || (diff.signum() != dp.signum()) {
             return (false, i);
         }
 
