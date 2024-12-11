@@ -5,8 +5,7 @@ fn main() {
     let file = File::open("data/input_day3.txt").expect("File not found");
     let reader = BufReader::new(file);
 
-    let mut line_vec: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
-    line_vec.pop();
+    let line_vec: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
 
     let mut result = 0;
 
@@ -41,7 +40,7 @@ fn extract_mul(str_vec: &str) -> i64 {
 fn validate_chunk(chunk: &str) -> bool {
     let mut partials: Vec<&str> = chunk.split(",").collect();
 
-    if partials.len() != 2 {
+    if partials.len() < 2 {
         return false;
     }
 
