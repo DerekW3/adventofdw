@@ -9,12 +9,25 @@ fn main() {
     line_vec.pop();
 }
 
-fn extract_mul(str_vec: &String) -> Vec<String> {
+fn extract_mul(str_vec: &String) -> i64 {
     let sub_vec: Vec<&str> = str_vec.split("mul(").collect();
 
-    for chunk in sub_vec {}
+    let mut res = 0;
 
-    vec![]
+    for chunk in sub_vec {
+        if validate_chunk(chunk) {
+            let exp = chunk.split(")").next().unwrap();
+
+            let nums: Vec<i64> = exp
+                .split(",")
+                .map(|num| num.parse::<i64>().unwrap())
+                .collect();
+
+            res += nums[0] * nums[1];
+        }
+    }
+
+    res
 }
 
 fn validate_chunk(chunk: &str) -> bool {
