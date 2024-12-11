@@ -15,13 +15,54 @@ fn main() {
             .map(|s| s.parse::<i16>().unwrap())
             .collect();
 
-        num_valid += 1;
+        let (success, fail_idx) = validate_test(&num_vec);
+
+        if success {
+            num_valid += 1;
+        } else {
+            if fail_idx > 0 {
+                let mut copy_vec = num_vec.clone();
+
+                copy_vec.remove(fail_idx - 1);
+
+                let (l_success, _) = validate_test(&copy_vec);
+
+                if l_success {
+                    num_valid += 1;
+                    continue;
+                }
+            }
+
+            let mut copy_vec = num_vec.clone();
+
+            copy_vec.remove(fail_idx);
+
+            let (m_success, _) = validate_test(&copy_vec);
+
+            if m_success {
+                num_valid += 1;
+                continue;
+            }
+
+            if fail_idx < num_vec.len() - 1 {
+                let mut copy_vec = num_vec.clone();
+
+                copy_vec.remove(fail_idx - 1);
+
+                let (r_success, _) = validate_test(&copy_vec);
+
+                if r_success {
+                    num_valid += 1;
+                    continue;
+                }
+            }
+        }
     }
 
     println!("The number of valid tests is {num_valid}");
 }
 
-fn validate_test(nums: Vec<i16>) -> (bool, usize) {
+fn validate_test(nums: &[i16]) -> (bool, usize) {
     let mut dp: i16 = 0;
     for i in 1..nums.len() {
         let diff = nums[i] - nums[i - 1];
