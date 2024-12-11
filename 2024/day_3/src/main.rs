@@ -7,9 +7,17 @@ fn main() {
 
     let mut line_vec: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
     line_vec.pop();
+
+    let mut result = 0;
+
+    for line in line_vec {
+        result += extract_mul(&line);
+    }
+
+    println!("The result is found to be {result}");
 }
 
-fn extract_mul(str_vec: &String) -> i64 {
+fn extract_mul(str_vec: &str) -> i64 {
     let sub_vec: Vec<&str> = str_vec.split("mul(").collect();
 
     let mut res = 0;
