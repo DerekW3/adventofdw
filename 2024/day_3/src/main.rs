@@ -16,13 +16,34 @@ fn main() {
     println!("The result is found to be {result}");
 }
 
-fn extract_mul(str_vec: &str) -> i64 {
-    let sub_vec: Vec<&str> = str_vec.split("mul(").collect();
+fn extract_mul(line: &str) -> i64 {
+    let mut do_iter = line.match_indices("do()").map(|cmd| cmd.0);
+    let mut dont_iter = line.match_indices("don't()").map(|cmd| cmd.0);
+
+    let sub_vec: Vec<&str> = line.split("mul(").collect();
+
+    let mut process = true;
 
     let mut res = 0;
 
+    let mut do_cmd = do_iter.next().unwrap_or(line.len());
+    let mut dont_cmd = dont_iter.next().unwrap_or(line.len());
+    let mut idx = 0;
+
     for chunk in sub_vec {
-        if validate_chunk(chunk) {
+        idx += chunk.len();
+
+        while do_cmd < idx || dont_cmd < idx {
+            if do_cmd <= dont_cmd {
+                process = true;
+                do_cmd = do_iter.next().unwrap_or(line.len());
+            } else {
+                process = false;
+                dont_cmd = dont_iter.next().unwrap_or(line.len());
+            }
+        }
+
+        if process && validate_chunk(chunk) {
             let exp = chunk.split(")").next().unwrap();
 
             let nums: Vec<i64> = exp
